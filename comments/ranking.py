@@ -38,5 +38,5 @@ class RankingCrawler:
 
 if __name__ == '__main__':
     c = MovieCategoryAcquirer().category_list[0]
-    r = RankingCrawler(c, 10)
+    r = RankingCrawler(c, 100)
     print(r.movie_list)
