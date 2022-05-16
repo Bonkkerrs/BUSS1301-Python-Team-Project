@@ -93,7 +93,7 @@ class Get_summary:
             i+=1
         return self.dic #得到了每个类型的大约20部电影的summary list
 #制作停用词表
-with open(r"C:\Users\Liuhao\Desktop\程序设计\程序设计大作业\停用词表.txt", encoding='utf-8') as f:
+with open(r"停用词表.txt", encoding='utf-8') as f:
     kk = f.readlines()
     content = []
     for i in kk:
