@@ -26,7 +26,6 @@ class MovieCommentCrawler:
             headers=headers)
         div_list = etree.HTML(response.text).xpath('//*[@id="comments"]/div')[:limit]
         content_X = []
-        print(div_list)
         for div in div_list:
             comment = div.xpath("./div[2]/p/span/text()")[0]
             content_X.append(comment)
@@ -47,7 +46,7 @@ class MovieCommentCrawler:
 
     def get_words_df(self):
         words_df = pd.DataFrame({'segment': self.segment})
-        stopwords = pd.read_csv("../stopwords.txt",
+        stopwords = pd.read_csv("stopwords.txt",
                                 index_col=False,
                                 quoting=3,
                                 sep="\t",
@@ -62,15 +61,18 @@ class MovieCommentCrawler:
         return words_stat
 
     def generate_wordcloud(self):
+        fig = plt.figure(dpi=600)
         wordcloud = WordCloud(font_path="simhei.ttf",
                               max_font_size=80,
-                              width=600, height=400
+                              width=600, height=400,
+                              scale=4
                               )
         word_frequence = {x[0]: x[1] for x in self.words_stat.head(1000).values}
         wordcloud = wordcloud.fit_words(word_frequence)
         plt.imshow(wordcloud)
         plt.axis('off')
         plt.show()
+        return fig
 
 
 if __name__ == '__main__':

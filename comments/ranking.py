@@ -1,4 +1,4 @@
-from category import MovieCategoryAcquirer, Category
+# from category import MovieCategoryAcquirer, Category
 
 
 class Movie:

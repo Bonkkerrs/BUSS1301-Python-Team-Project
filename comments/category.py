@@ -9,6 +9,9 @@ class Category:
         self.type_name = type_name
         self.type_id = type_id
 
+    def __str__(self):
+        return self.type_name
+
     def query_list(self, ranking_limit):
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36',

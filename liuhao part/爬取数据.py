@@ -1,23 +1,27 @@
 import json
 
-import selenium,time,re
+import selenium, time, re
 
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.common import keys
-web_source={
-            '剧情片':'https://movie.douban.com/tag/#/?sort=T&range=0,10&tags=%E7%94%B5%E5%BD%B1,%E5%89%A7%E6%83%85',
-            '喜剧片':'https://movie.douban.com/tag/#/?sort=T&range=0,10&tags=%E7%94%B5%E5%BD%B1,%E5%96%9C%E5%89%A7',
-            '科幻片':'https://movie.douban.com/tag/#/?sort=T&range=0,10&tags=%E7%94%B5%E5%BD%B1,%E7%A7%91%E5%B9%BB'
-            }
+
+
+web_source = {
+    '剧情片': 'https://movie.douban.com/tag/#/?sort=T&range=0,10&tags=%E7%94%B5%E5%BD%B1,%E5%89%A7%E6%83%85',
+    '喜剧片': 'https://movie.douban.com/tag/#/?sort=T&range=0,10&tags=%E7%94%B5%E5%BD%B1,%E5%96%9C%E5%89%A7',
+    '科幻片': 'https://movie.douban.com/tag/#/?sort=T&range=0,10&tags=%E7%94%B5%E5%BD%B1,%E7%A7%91%E5%B9%BB'
+}
+
+
 def get_data(x):
-    #设置四个列表
-    film=[]
-    #1.创建浏览器对象
-    web=Chrome()
-    #2.打开一个网址
-    film_type=web_source[x]
+    # 设置四个列表
+    film = []
+    # 1.创建浏览器对象
+    web = Chrome()
+    # 2.打开一个网址
+    film_type = web_source[x]
     web.get(film_type)
     time.sleep(1)
     for i in range(1, 6):
@@ -57,8 +61,7 @@ def get_data(x):
     f.write(list_json)
     f.close()
 
+
 get_data('剧情片')
 get_data('喜剧片')
 get_data('科幻片')
-
-
