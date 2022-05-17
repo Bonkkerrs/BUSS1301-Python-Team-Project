@@ -7,8 +7,6 @@ from tkinter import ttk
 import os
 
 
-
-
 class DoubanManagerApp:
     def __init__(self):
         self.root = Tk()
@@ -35,10 +33,11 @@ class DoubanManagerApp:
     def get_wordcloud(self):
         w = WordCloundManagerApp()
 
+
 class CorrelationAnalysisManagerApp:
     def __init__(self):
         self.root = Tk()
-        
+
 
 class WordCloundManagerApp:
     def __init__(self):

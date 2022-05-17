@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter.filedialog import askdirectory
 
-from pyparsing import col
 
 class DemoApp:
     def __init__(self):
@@ -12,7 +11,7 @@ class DemoApp:
         self.mylabel.grid(row=0, column=0)
         self.mylabel = Label(self.root, text='Hello', width=5)
         self.mylabel.grid(row=1, column=0)
-        self.mylabel1 = Label(self.root, text='Hello1', bg='red',fg='white')
+        self.mylabel1 = Label(self.root, text='Hello1', bg='red', fg='white')
         self.mylabel1.grid(row=0, column=1)
         self.mylabel2 = Label(self.root, text='Hello2')
         self.mylabel2.grid(row=1, column=2)
@@ -42,24 +41,24 @@ class DemoApp:
 
         self.root.mainloop()
 
-    
     def click_me(self):
         print("Clicked")
         print(self.myentry.get())
         self.myentry.delete(0, END)
         self.myentry.insert(END, 'Clicked')
-        
+
     def choose(self):
         selection_list = []
         for selection_index in self.mylistbox.curselection():
             selection_list.append(self.fruit_list[selection_index])
         print(selection_list)
-        
+
     def ask_directory(self):
         path = askdirectory()
         self.my_directory_entry.config(state='normal')
         self.my_directory_entry.insert(END, path)
         self.my_directory_entry.config(state='readonly')
-        
+
+
 if __name__ == '__main__':
     d = DemoApp()
