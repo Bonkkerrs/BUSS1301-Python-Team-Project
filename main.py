@@ -7,6 +7,8 @@ from tkinter import ttk
 import os
 
 
+
+
 class DoubanManagerApp:
     def __init__(self):
         self.root = Tk()
@@ -33,6 +35,10 @@ class DoubanManagerApp:
     def get_wordcloud(self):
         w = WordCloundManagerApp()
 
+class CorrelationAnalysisManagerApp:
+    def __init__(self):
+        self.root = Tk()
+        
 
 class WordCloundManagerApp:
     def __init__(self):
@@ -52,22 +58,22 @@ class WordCloundManagerApp:
         self.var1 = IntVar()
         self.save_pic_label = Checkbutton(self.root, text='保存输出', variable=self.var1,
                                           command=self.save_pic, onvalue=1, offvalue=0)
-        self.save_pic_label.grid(row=3, column=0, rowspan=1)
+        self.save_pic_label.grid(row=1, column=0, rowspan=1)
         self.query_btn = Button(self.root, text='查询', command=self.new_query)
-        self.query_btn.grid(row=3, column=1)
+        self.query_btn.grid(row=1, column=1)
         self.entry_frame = Frame(self.root)
         self.add_button = Button(self.entry_frame, text='选择类型', command=self.choose_category)
         self.delete_button = Button(self.entry_frame, text='生成词云', command=self.get_wordcloud)
-        self.entry_frame.grid(row=3, column=2, columnspan=2, sticky=W)
+        self.entry_frame.grid(row=1, column=2, columnspan=2, sticky=W)
         self.add_button.pack(side=LEFT)
         self.delete_button.pack(side=LEFT)
         # Row2
         self.output_directory_label = Label(self.root, text='输出路径：')
-        self.output_directory_label.grid(row=5, column=0, sticky=E)
+        self.output_directory_label.grid(row=2, column=0, sticky=E)
         self.output_directory = Entry(self.root, width=20, state='disabled')
-        self.output_directory.grid(row=5, column=1, sticky=W, columnspan=2)
+        self.output_directory.grid(row=2, column=1, sticky=W, columnspan=2)
         self.output_directory_select = Button(text='选择路径', command=self.selectPath, state='disabled')
-        self.output_directory_select.grid(row=5, column=3)
+        self.output_directory_select.grid(row=2, column=3)
         # 子窗口
         self.window = Toplevel()
         self.window.title('')
@@ -165,3 +171,4 @@ class WordCloundManagerApp:
 
 if __name__ == '__main__':
     d = DoubanManagerApp()
+    # w = WordCloundManagerApp()
