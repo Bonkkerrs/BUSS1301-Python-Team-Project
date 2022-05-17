@@ -21,6 +21,9 @@ class Category:
         response = requests.get(url, headers=headers)
         return json.loads(response.text)
 
+    def get_category_dict(self):
+        return {self.type_name:f'https://movie.douban.com/j/chart/top_list?type={self.type_id}&interval_id=100%3A90&action=&start=0&limit=20'}
+
 
 class MovieCategoryAcquirer:
     def __init__(self):
@@ -55,4 +58,5 @@ class MovieCategoryAcquirer:
 if __name__ == '__main__':
     # m = MovieCategoryAcquirer()
     c = Category("剧情", '11')
+    print(c.get_category_dict())
     c.query_list(10)
