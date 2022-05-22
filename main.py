@@ -1,10 +1,16 @@
+import os, sys
+sys.path.append(os.path.join(os.getcwd(), 'keywords'))
+print(os.getcwd())
 from tkinter import *
+from correlations.analysis import CorrelationAnalyzer
+from keywords.summary import SummaryAcquirer
+from keywords.analysis import KeywordsAnalyzer
 from comments.category import Category, MovieCategoryAcquirer
 from comments.comment import MovieCommentCrawler
 from comments.ranking import RankingCrawler
 from tkinter.filedialog import askdirectory
 from tkinter import ttk
-import os
+
 
 
 class DoubanManagerApp:
@@ -20,7 +26,7 @@ class DoubanManagerApp:
 
         self.corr = Button(self.choice_frame, text='相关性分析', command=self.corr_analysis)
         self.wordcloud = Button(self.choice_frame, text='分类TOP短评词云图', command=self.get_wordcloud)
-        self.corr1 = Button(self.choice_frame, text='相关性分析2', command=self.corr_analysis)
+        self.corr1 = Button(self.choice_frame, text='简介关键词分析', command=self.keyword_analysis)
         self.corr.pack(side=LEFT)
         self.wordcloud.pack(side=LEFT)
         self.corr1.pack(side=LEFT)
@@ -28,15 +34,117 @@ class DoubanManagerApp:
         self.root.mainloop()
 
     def corr_analysis(self):
-        print("1")
+        self.root.destroy()
+        c = CorrelationAnalysisManagerApp()
 
+    def keyword_analysis(self):
+        self.root.destroy()
+        k = KeywordManagerApp()
+    
     def get_wordcloud(self):
+        self.root.destroy()
         w = WordCloundManagerApp()
 
 
 class CorrelationAnalysisManagerApp:
     def __init__(self):
         self.root = Tk()
+        self.root.title("年份-时长-评分相关性分析")
+        self.root.resizable(False, False)    
+        self.category_label = Label(self.root, text='影片类型：', anchor='e')
+        self.category_label.grid(row=0, column=0, sticky=E)
+        self.category = Entry(self.root, width=8)
+        self.category.grid(row=0, column=1, sticky=W)
+        self.entry_frame = Frame(self.root)
+        self.add_button = Button(self.entry_frame, text='选择类型', command=self.choose_category)
+        self.entry_frame.grid(row=0, column=2, columnspan=2, sticky=W)
+        self.add_button.pack(side=LEFT)
+        self.add_button2 = Button(self.root, text='确定查询', command=self.analyze_corr)
+        self.add_button2.grid(row=1, column=2)
+        self.choose_y2l = Button(self.root, text='年份-时长', command=self.length_year_corr)
+        self.choose_y2l.grid(row=2, column=0)
+        self.choose_y2s = Button(self.root, text='年份-评分', command=self.score_year_corr)
+        self.choose_y2s.grid(row=2, column=1)
+        self.choose_l2s = Button(self.root, text='时长-评分', command=self.length_score_corr)
+        self.choose_l2s.grid(row=2, column=2)
+        # 子窗口       
+        self.window = Toplevel()
+        self.window.title('')
+        self.selected_category_list_label = Label(self.window, text='电影分类')
+        self.selected_category_list_label.pack()
+        self.selected_category_list = Listbox(self.window, border=0, width=12, selectmode=SINGLE)
+        self.selected_category_list.configure(justify=CENTER)
+        self.selected_category_list.pack()
+        self.get_category_list()
+        
+    def choose_category(self):
+        cat_idx = self.selected_category_list.curselection()[0]
+        self.category.delete(0, END)
+        self.category.insert(0, self.cat_list[cat_idx].type_name)
+        self.selected_category = self.cat_list[cat_idx]
+
+    def get_category_list(self):
+        m = MovieCategoryAcquirer()
+        self.cat_list = m.acquire_category()
+        for cat in self.cat_list:
+            self.selected_category_list.insert(END, cat)
+    
+    def analyze_corr(self):
+        self.s = CorrelationAnalyzer(category_obj=self.selected_category, query_limit=50)
+        
+    def length_year_corr(self):
+        self.s.length_year()      
+
+    def score_year_corr(self):
+        self.s.score_year()
+
+    def length_score_corr(self):
+        self.s.length_score()
+
+
+class KeywordManagerApp:
+    def __init__(self):
+        self.root = Tk()
+        self.root.title("简介关键词分析")
+        self.root.resizable(False, False)
+        self.category_label = Label(self.root, text='影片类型：', anchor='e')
+        self.category_label.grid(row=0, column=0, sticky=E)
+        self.category = Entry(self.root, width=8)
+        self.category.grid(row=0, column=1, sticky=W)
+        self.entry_frame = Frame(self.root)
+        self.add_button = Button(self.entry_frame, text='选择类型', command=self.choose_category)
+        self.entry_frame.grid(row=0, column=2, columnspan=2, sticky=W)
+        self.add_button.pack(side=LEFT)
+        self.keyword_btn = Button(self.root,text='关键词查询',command=self.keyword_search)
+        self.keyword_btn.grid(row=2,column=3)  
+        # 子窗口       
+        self.window = Toplevel()
+        self.window.title('')
+        self.selected_category_list_label = Label(self.window, text='电影分类')
+        self.selected_category_list_label.pack()
+        self.selected_category_list = Listbox(self.window, border=0, width=12, selectmode=SINGLE)
+        self.selected_category_list.configure(justify=CENTER)
+        self.selected_category_list.pack()
+        self.get_category_list()
+        
+        
+    def keyword_search(self):
+        s = SummaryAcquirer(category_obj=self.selected_category)
+        k = KeywordsAnalyzer(s.get_summary())
+        d = k.text_rank()
+        print(d)
+        
+    def choose_category(self):
+        cat_idx = self.selected_category_list.curselection()[0]
+        self.category.delete(0, END)
+        self.category.insert(0, self.cat_list[cat_idx].type_name)
+        self.selected_category = self.cat_list[cat_idx]
+
+    def get_category_list(self):
+        m = MovieCategoryAcquirer()
+        self.cat_list = m.acquire_category()
+        for cat in self.cat_list:
+            self.selected_category_list.insert(END, cat)
 
 
 class WordCloundManagerApp:
@@ -168,6 +276,7 @@ class WordCloundManagerApp:
             self.save_fig = True
 
 
+        
 if __name__ == '__main__':
     d = DoubanManagerApp()
     # w = WordCloundManagerApp()
