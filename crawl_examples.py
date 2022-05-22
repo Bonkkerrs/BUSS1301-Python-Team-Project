@@ -4,6 +4,7 @@ import requests
 from lxml import etree
 from tqdm import tqdm
 
+
 class Project:
     def __init__(self, title, report, demo):
         self.title = title.split('by')[0].strip()
@@ -11,11 +12,11 @@ class Project:
         self.demo_url = demo
         self.download(title + '.pdf', self.report_url)
         # self.download(title + '.mp4', self.demo_url)
-    
+
     @staticmethod
     def download(fname, url):
         file = requests.get(url).content
-        with open(f'./Examples/{fname}','wb+') as fp:
+        with open(f'./Examples/{fname}', 'wb+') as fp:
             fp.write(file)
 
 
@@ -37,4 +38,3 @@ if __name__ == '__main__':
         demo = base_html + html_list[1].xpath('./@href')[0]
         p = Project(title, report, demo)
         p_list.append(p)
-    

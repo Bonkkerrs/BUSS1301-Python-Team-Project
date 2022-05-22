@@ -15,7 +15,7 @@ class Movie:
         self.vote_count = vote_count
         self.actors = actors
         self.release_date = release_date
-    
+
     def get_year(self):
         try:
             return (self.release_date).split('-')[0]

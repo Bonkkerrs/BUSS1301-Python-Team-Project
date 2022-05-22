@@ -7,7 +7,6 @@ from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.common import keys
 
-
 web_source = {
     '剧情片': 'https://movie.douban.com/tag/#/?sort=T&range=0,10&tags=%E7%94%B5%E5%BD%B1,%E5%89%A7%E6%83%85',
     '喜剧片': 'https://movie.douban.com/tag/#/?sort=T&range=0,10&tags=%E7%94%B5%E5%BD%B1,%E5%96%9C%E5%89%A7',

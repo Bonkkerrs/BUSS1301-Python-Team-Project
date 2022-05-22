@@ -22,7 +22,8 @@ class Category:
         return json.loads(response.text)
 
     def get_category_dict(self):
-        return {self.type_name:f'https://movie.douban.com/j/chart/top_list?type={self.type_id}&interval_id=100%3A90&action=&start=0&limit=20'}
+        return {
+            self.type_name: f'https://movie.douban.com/j/chart/top_list?type={self.type_id}&interval_id=100%3A90&action=&start=0&limit=20'}
 
 
 class MovieCategoryAcquirer:

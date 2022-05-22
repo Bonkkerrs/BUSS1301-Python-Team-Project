@@ -1,5 +1,6 @@
 import jieba
 import os, sys
+
 sys.path.append(os.getcwd())
 from summary import SummaryAcquirer
 from comments.category import MovieCategoryAcquirer
@@ -40,4 +41,3 @@ if __name__ == '__main__':
     s = SummaryAcquirer(category_obj)
     k = KeywordsAnalyzer(s.get_summary())
     kewords_dict = k.text_rank()
-    

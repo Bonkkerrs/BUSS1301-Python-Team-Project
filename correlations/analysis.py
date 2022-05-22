@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib
 from matplotlib import pyplot as plt
 import os, sys
+
 sys.path.append(os.getcwd())
 from comments.ranking import RankingCrawler
 from comments.category import MovieCategoryAcquirer
@@ -36,6 +37,7 @@ class CorrelationAnalyzer:
         print(core)
         plt.scatter(self.film_score, self.film_year)
         plt.show()
+
 
 if __name__ == '__main__':
     cat_list = MovieCategoryAcquirer().acquire_category()

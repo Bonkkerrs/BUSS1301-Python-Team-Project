@@ -2,12 +2,15 @@ from matplotlib import category
 import requests
 from bs4 import BeautifulSoup as BS
 import warnings
+
 warnings.filterwarnings('ignore')
 import os, sys
+
 sys.path.append(os.getcwd())
 import re
 import tqdm
 from comments.category import Category, MovieCategoryAcquirer
+
 
 class SummaryAcquirer:
     def __init__(self, category_obj):

@@ -1,6 +1,5 @@
 import os, sys
 sys.path.append(os.path.join(os.getcwd(), 'keywords'))
-print(os.getcwd())
 from tkinter import *
 from correlations.analysis import CorrelationAnalyzer
 from keywords.summary import SummaryAcquirer
@@ -10,7 +9,6 @@ from comments.comment import MovieCommentCrawler
 from comments.ranking import RankingCrawler
 from tkinter.filedialog import askdirectory
 from tkinter import ttk
-
 
 
 class DoubanManagerApp:
@@ -40,7 +38,7 @@ class DoubanManagerApp:
     def keyword_analysis(self):
         self.root.destroy()
         k = KeywordManagerApp()
-    
+
     def get_wordcloud(self):
         self.root.destroy()
         w = WordCloundManagerApp()
@@ -50,7 +48,7 @@ class CorrelationAnalysisManagerApp:
     def __init__(self):
         self.root = Tk()
         self.root.title("年份-时长-评分相关性分析")
-        self.root.resizable(False, False)    
+        self.root.resizable(False, False)
         self.category_label = Label(self.root, text='影片类型：', anchor='e')
         self.category_label.grid(row=0, column=0, sticky=E)
         self.category = Entry(self.root, width=8)
@@ -76,7 +74,7 @@ class CorrelationAnalysisManagerApp:
         self.selected_category_list.configure(justify=CENTER)
         self.selected_category_list.pack()
         self.get_category_list()
-        
+
     def choose_category(self):
         cat_idx = self.selected_category_list.curselection()[0]
         self.category.delete(0, END)
@@ -88,12 +86,12 @@ class CorrelationAnalysisManagerApp:
         self.cat_list = m.acquire_category()
         for cat in self.cat_list:
             self.selected_category_list.insert(END, cat)
-    
+
     def analyze_corr(self):
         self.s = CorrelationAnalyzer(category_obj=self.selected_category, query_limit=50)
-        
+
     def length_year_corr(self):
-        self.s.length_year()      
+        self.s.length_year()
 
     def score_year_corr(self):
         self.s.score_year()
@@ -115,8 +113,8 @@ class KeywordManagerApp:
         self.add_button = Button(self.entry_frame, text='选择类型', command=self.choose_category)
         self.entry_frame.grid(row=0, column=2, columnspan=2, sticky=W)
         self.add_button.pack(side=LEFT)
-        self.keyword_btn = Button(self.root,text='关键词查询',command=self.keyword_search)
-        self.keyword_btn.grid(row=2,column=3)  
+        self.keyword_btn = Button(self.root, text='关键词查询', command=self.keyword_search)
+        self.keyword_btn.grid(row=2, column=3)
         # 子窗口       
         self.window = Toplevel()
         self.window.title('')
@@ -126,14 +124,13 @@ class KeywordManagerApp:
         self.selected_category_list.configure(justify=CENTER)
         self.selected_category_list.pack()
         self.get_category_list()
-        
-        
+
     def keyword_search(self):
         s = SummaryAcquirer(category_obj=self.selected_category)
         k = KeywordsAnalyzer(s.get_summary())
         d = k.text_rank()
         print(d)
-        
+
     def choose_category(self):
         cat_idx = self.selected_category_list.curselection()[0]
         self.category.delete(0, END)
@@ -276,7 +273,6 @@ class WordCloundManagerApp:
             self.save_fig = True
 
 
-        
 if __name__ == '__main__':
     d = DoubanManagerApp()
     # w = WordCloundManagerApp()
