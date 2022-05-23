@@ -18,7 +18,9 @@ class Category:
             'X-Requested-With': 'XMLHttpRequest'
         }
         url = f'https://movie.douban.com/j/chart/top_list?type={self.type_id}&interval_id=100:90&action=&start=0&limit={ranking_limit}'
+        print(url)
         response = requests.get(url, headers=headers)
+        print(response)
         return json.loads(response.text)
 
     def get_category_dict(self):

@@ -1,9 +1,14 @@
 import os, sys
+from sympy import expand
+from tkinterweb import HtmlFrame
+from numpy import row_stack
 sys.path.append(os.path.join(os.getcwd(), 'keywords'))
+sys.path.append(os.path.join(os.getcwd(), 'maps'))
 from tkinter import *
 from correlations.analysis import CorrelationAnalyzer
 from keywords.summary import SummaryAcquirer
 from keywords.analysis import KeywordsAnalyzer
+from maps.map import GeographyAnalyzer
 from comments.category import Category, MovieCategoryAcquirer
 from comments.comment import MovieCommentCrawler
 from comments.ranking import RankingCrawler
@@ -21,13 +26,14 @@ class DoubanManagerApp:
                            underline=1, anchor='nw', justify=CENTER)
         self.intro.grid(row=0, columnspan=4, column=0, sticky=N)
         self.choice_frame = Frame(self.root)
-
         self.corr = Button(self.choice_frame, text='相关性分析', command=self.corr_analysis)
         self.wordcloud = Button(self.choice_frame, text='分类TOP短评词云图', command=self.get_wordcloud)
-        self.corr1 = Button(self.choice_frame, text='简介关键词分析', command=self.keyword_analysis)
+        self.keyword = Button(self.choice_frame, text='简介关键词分析', command=self.keyword_analysis)
+        self.map = Button(self.choice_frame, text = '分类TOP地域分布图', command=self.get_map)
         self.corr.pack(side=LEFT)
         self.wordcloud.pack(side=LEFT)
-        self.corr1.pack(side=LEFT)
+        self.keyword.pack(side=LEFT,)
+        self.map.pack(side=LEFT)
         self.choice_frame.grid(row=1, columnspan=4, column=0)
         self.root.mainloop()
 
@@ -38,6 +44,10 @@ class DoubanManagerApp:
     def keyword_analysis(self):
         self.root.destroy()
         k = KeywordManagerApp()
+
+    def get_map(self):
+        self.root.destroy()
+        m = MapManagerApp()
 
     def get_wordcloud(self):
         self.root.destroy()
@@ -130,6 +140,57 @@ class KeywordManagerApp:
         k = KeywordsAnalyzer(s.get_summary())
         d = k.text_rank()
         print(d)
+
+    def choose_category(self):
+        cat_idx = self.selected_category_list.curselection()[0]
+        self.category.delete(0, END)
+        self.category.insert(0, self.cat_list[cat_idx].type_name)
+        self.selected_category = self.cat_list[cat_idx]
+
+    def get_category_list(self):
+        m = MovieCategoryAcquirer()
+        self.cat_list = m.acquire_category()
+        for cat in self.cat_list:
+            self.selected_category_list.insert(END, cat)
+
+class MapManagerApp:
+    def __init__(self):
+        self.root = Tk()
+        self.root.title("TOP地域分布图")
+        self.root.resizable(False, False)
+        self.category_label = Label(self.root, text='影片类型：', anchor='e')
+        self.category_label.grid(row=0, column=0, sticky=E)
+        self.category = Entry(self.root, width=8)
+        self.category.grid(row=0, column=1, sticky=W)
+        self.entry_frame = Frame(self.root)
+        self.add_button = Button(self.entry_frame, text='选择类型', command=self.choose_category)
+        self.entry_frame.grid(row=0, column=2, columnspan=2, sticky=W)
+        self.add_button.pack(side=LEFT)
+        self.add_button2 = Button(self.root, text='获取地图', command=self.get_worldmap)
+        self.add_button2.grid(row=1,column=2)
+        self.limit_label = Label(self.root, text='影片数量：', anchor='e')
+        self.limit_label.grid(row=1, column=0)
+        self.selected_limit = Entry(self.root, width=8)
+        self.selected_limit.grid(row=1,column=1)
+        # 子窗口       
+        self.window = Toplevel()
+        self.window.title('')
+        self.selected_category_list_label = Label(self.window, text='电影分类')
+        self.selected_category_list_label.pack()
+        self.selected_category_list = Listbox(self.window, border=0, width=12, selectmode=SINGLE)
+        self.selected_category_list.configure(justify=CENTER)
+        self.selected_category_list.pack()
+        self.get_category_list()
+    
+    def get_worldmap(self):
+        m = GeographyAnalyzer(category_obj=self.selected_category,query_limit=self.selected_limit.get())
+        m.get_regions()
+        self.map_frame = Tk()
+        self.frame = HtmlFrame(self.map_frame)
+        self.frame.load_url('https://www.baidu.com')
+        self.frame.pack(fill="both",expand=True)
+        self.map_frame.mainloop()
+
 
     def choose_category(self):
         cat_idx = self.selected_category_list.curselection()[0]
